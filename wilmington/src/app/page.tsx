@@ -1,5 +1,7 @@
 "use client";
-import Image from "next/image";
+//import Image from "next/image";
+//import Link from "next/link";
+import Navbar from './components/navbar'
 import {
   Table,
   TableHeader,
@@ -8,6 +10,7 @@ import {
   TableRow,
   TableCell,
   getKeyValue,
+  Pagination 
 } from "@heroui/react";
 
 const rows = [
@@ -80,70 +83,11 @@ export default function Home() {
   return (
     <div className="ml-[220px] pt-[130px] px-6">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-      <h3 className="flex items-center gap-[10px] font-size: var(--text-9xl)">Applicants</h3>
+      <h1 className="text-xl font-semibold">Applicants</h1>
 
- <div className="fixed left-0 top-[135px] h-[calc(100vh-135px)] w-[220px] bg-[#424242] text-white flex flex-col justify-between p-6 rounded-lg ml-2">
-  <div className="flex flex-col gap-6">
-  <a
-    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-    href="https://nextjs.org/learn?..."
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <Image
-      aria-hidden
-      src="/file.svg"
-      alt="File icon"
-      width={16}
-      height={16}
-    />
-    Dashboard
-  </a>
-  <a
-    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-    href="https://vercel.com/templates?..."
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <Image
-      aria-hidden
-      src="/window.svg"
-      alt="Window icon"
-      width={16}
-      height={16}
-    />
-    Applicants
-  </a>
-  <a
-    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-    href="https://nextjs.org?..."
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <Image
-      aria-hidden
-      src="/globe.svg"
-      alt="Globe icon"
-      width={16}
-      height={16}
-    />
-    Job Postings
-  </a>
-  </div>
-  <Image
-    aria-hidden
-    src="/digicred.svg"
-    alt="DigiCred logo"
-    width={200}
-    height={80}
-  />
-</div>
+ <Navbar/>
 
-
-
-
-
-      <Table
+  <Table
   aria-label="Styled table"
   classNames={{
     table: "min-w-full text-sm",
@@ -152,6 +96,19 @@ export default function Home() {
     wrapper: "shadow rounded overflow-hidden",
   }}
   isStriped
+  bottomContent={
+    <div className="flex w-full justify-between items-center px-2">
+      <span className="text-sm text-gray-600">Showing 1-10 of 30</span>
+      <Pagination
+        isCompact
+        showControls
+        total={3}
+        initialPage={1}
+        className="mt-2"
+        variant="light"
+      />
+    </div>
+  }
 >
   <TableHeader columns={columns}>
     {(column) => (
