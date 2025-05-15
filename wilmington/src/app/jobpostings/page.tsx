@@ -2,7 +2,7 @@
 //import Image from "next/image";
 import { useState } from "react";
 import Navbar from '../components/navbar'
-
+import { postUser } from '../services/jobpostings'
 import {
   Table,
   TableHeader,
@@ -11,7 +11,7 @@ import {
   TableRow,
   TableCell,
   getKeyValue,
-  Pagination
+  
 } from "@heroui/react";
 
 
@@ -63,8 +63,37 @@ const columns = [
   },
 ];
 
+const currentPage = 1; // or wherever your page state comes from
+const itemsPerPage = 10;
+const totalItems = 30; // example total count from database
+
+const startItem = (currentPage - 1) * itemsPerPage + 1;
+const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+
+
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
+
+  const [Title, setTitle] = useState('');
+  const [Date, setDate] = useState('');
+  const [Website, setWebsite] = useState('');
+  const [Description, setDescription] = useState('');
+
+  const [status, setStatus] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await postUser({ Title, Date, Website, Description });
+      setStatus('User created!');
+      setTitle('');
+      setDate('');
+      setWebsite('');
+      setDescription('');
+      setShowModal(false);
+    } catch {
+      console.log(status)    }
+  };
 
   return (
 <div className="ml-[220px] pt-[130px] px-6">
@@ -84,24 +113,38 @@ export default function Home() {
   aria-label="Styled table"
   classNames={{
     table: "min-w-full text-sm",
-    th: "bg-gray-100 text-left font-semibold text-gray-700",
+    th: " text-left font-semibold text-gray-700 border-b border-gray-200",
     td: "py-3 px-4 border-b border-gray-200",
     wrapper: "shadow rounded overflow-hidden",
   }}
   isStriped
-  bottomContent={
-    <div className="flex w-full justify-between items-center px-2">
-      <span className="text-sm text-gray-600">Showing 1-10 of 30</span>
-      <Pagination
-        isCompact
-        showControls
-        total={3}
-        initialPage={1}
-        className="mt-2"
-        variant="light"
-      />
+   bottomContent={
+  <div className="flex w-full justify-between items-center px-4 py-4">
+    
+    {/* Pagination Controls */}
+    <div className="flex items-center gap-2">
+      <button className="px-3 py-1 rounded border text-gray-600 hover:bg-gray-100 text-sm">
+        Previous
+      </button>
+      {[1, 2, 3].map((page) => (
+        <button
+          key={page}
+          className="w-10 h-10 flex items-center justify-center rounded-full border text-gray-600 hover:bg-gray-100 text-sm"
+        >
+          {page}
+        </button>
+      ))}
+      <button className="px-3 py-1 rounded border text-gray-600 hover:bg-gray-100 text-sm">
+        Next
+      </button>
     </div>
-  }
+
+    {/* Dynamic Showing Text */}
+    <span className="text-sm text-gray-500">
+      Showing {startItem}-{endItem} of {totalItems}
+    </span>
+  </div>
+}
 >
   <TableHeader columns={columns}>
     {(column) => (
@@ -137,22 +180,22 @@ export default function Home() {
     <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-lg">
       <h2 className="text-xl font-bold mb-4">Post a Job</h2>
 
-      <form className="space-y-4">
+      <form onSubmit={handleSubmit}  className="space-y-4">
         <div>
           <label className="block font-medium text-sm">Job Title</label>
-          <input type="text" className="w-full border border-gray-300 rounded px-3 py-2" />
+          <input type="text" value={Title} onChange={(e) => setTitle(e.target.value)} className="w-full border border-gray-300 rounded px-3 py-2" />
         </div>
         <div>
           <label className="block font-medium text-sm">Date</label>
-          <input type="date" className="w-full border border-gray-300 rounded px-3 py-2" />
+          <input type="date" value={Date} onChange={(e) => setDate(e.target.value)} className="w-full border border-gray-300 rounded px-3 py-2" />
         </div>
         <div>
           <label className="block font-medium text-sm">Website Posting Link</label>
-          <input type="url" className="w-full border border-gray-300 rounded px-3 py-2" />
+          <input type="url" value={Website} onChange={(e) => setWebsite(e.target.value)} className="w-full border border-gray-300 rounded px-3 py-2" />
         </div>
         <div>
           <label className="block font-medium text-sm">Job Description</label>
-          <textarea className="w-full border border-gray-300 rounded px-3 py-2" rows={4}></textarea>
+          <textarea value={Description} onChange={(e) => setDescription(e.target.value)} className="w-full border border-gray-300 rounded px-3 py-2" rows={4}></textarea>
         </div>
 
         <div className="flex justify-end gap-3 pt-4">
