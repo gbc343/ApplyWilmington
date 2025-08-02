@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+//import Image from "next/image";
  
 export default function Header()
 {
@@ -8,9 +8,9 @@ export default function Header()
             <div className="w-full max-w-[1512px] h-[125px] px-5 flex items-center gap-[10px]">
                 <div className="h-full">
 
-                    <Image
+                    <img
                     aria-hidden
-                    src="/applywilmington.svg"
+                    src="/ApplyWilmington.png"
                     alt="File icon"
                     width={120}
                     height={150}

@@ -2,11 +2,20 @@
 //import Image from "next/image";
 //import Link from "next/link"; pl-[10%]
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
 export default function Home() {
+const router = useRouter();
+
+const handleClick = () => {
+    router.push(`/dashboard`);
+  };
+
+
   return (
 
     
-        <main>
+  <main>
 <div
   className="relative h-[80vh] w-full bg-cover bg-center flex items-center"
   style={{ backgroundImage: 'url("/ff98d3d0f138aaf2b8f93392a1e8ae267b4bc8a8.jpg")' }}
@@ -21,7 +30,10 @@ export default function Home() {
       Register today to post jobs and find qualified candidates based on real academic achievements,
       making hiring smarter and easier.
     </p>
-    <button className="relative z-10 bg-indigo-600 hover:bg-indigo-700 text-gray-50 text-base px-8 py-4 rounded shadow-md">
+    <button
+     type="button"
+     onClick={() => handleClick()}
+     className="relative z-10 bg-indigo-600 hover:bg-indigo-700 text-gray-50 text-base px-8 py-4 rounded shadow-md">
         Register Now
     </button>
   </div>
@@ -92,7 +104,10 @@ export default function Home() {
     <div className="text-center md:text-left">
       <h2 className="text-3xl font-serif italic font-semibold mb-4">Benefits</h2>
       <p className="text-gray-700 text-lg mb-6">Sign up and create your business profile in minutes.</p>
-      <button className="bg-indigo-500 hover:bg-indigo-600 text-white text-base px-8 py-3 rounded-full shadow-md">
+      <button
+      type="button"
+      onClick={() => handleClick()}
+      className="bg-indigo-500 hover:bg-indigo-600 text-white text-base px-8 py-3 rounded-full shadow-md">
         Register Now
       </button>
     </div>
@@ -154,6 +169,8 @@ export default function Home() {
 
     {/* Overlay Button */}
     <button
+      type="button"
+      onClick={() => handleClick()}
       className="absolute bg-indigo-500 hover:bg-indigo-600 text-white px-10 py-4 rounded-full text-sm shadow-md"
       style={{ top: '62%', left: '53%' }} // ⬅️ Adjust these to position over the visual button
     >

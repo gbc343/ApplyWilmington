@@ -1,4 +1,4 @@
-
+import axios from 'axios'
 
 export async function getUsers() {
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -6,18 +6,16 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
   if (!API_BASE) {
     throw new Error('API_BASE is undefined. Check your .env.local setup.');
   }
-
-  const res = await fetch(`${API_BASE}/job-posting/`);
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch: ${res.status}`);
+  try{
+  const res =  await axios.get(`${API_BASE}/job-posting/`);
+  return res.data;;
+  } catch (err) {
+  throw err;
   }
-
-  return await res.json();
 }
-// services/userService.ts
+
 export const postUser = async (userData: { Title: string; Date: string; Website: string; Description: string }) => {
-  console.log('Calling postUser with:', userData); // ✅ add this
+  console.log('Calling postUser with:', userData);
 
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -25,33 +23,34 @@ export const postUser = async (userData: { Title: string; Date: string; Website:
     throw new Error('API_BASE is undefined. Check your .env.local and build process.');
   }
 
-  const response = await fetch(`${API_BASE}/job-posting/create`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(userData),
-  });
+  try {
+    const response = await axios.post(`${API_BASE}/job-posting/create`, userData);
+    return response.data;
+  } catch (error) {
+    console.error('Error posting user:', error);
+    throw error;
+  }
 
-
-
-  if (!response.ok) throw new Error('Failed to create user');
-  return await response.json();
 };
 
-export const updateJobPosting = async (id: string, updateData: { Title: string; Date: string; Website: string; Description: string }) => {
+
+export const updateJobPosting = async (
+  id: string,
+  updateData: { Title: string; Date: string; Website: string; Description: string }
+) => {
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  if (!API_BASE) {
+    throw new Error('API_BASE is undefined. Check your .env.local and build process.');
+  }
+
+  const url = `${API_BASE}/job-posting/${id}`;
+  console.log('Sending PATCH to:', url);
+  console.log('Payload:', updateData);
+
   try {
-    console.log('Sending PATCH to:', `${process.env.NEXT_PUBLIC_API_BASE_URL}/job-postings/${id}`);
-    console.log('Payload:', updateData);
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/job-posting/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updateData),
-    });
-
-    if (!res.ok) throw new Error('Failed to update job posting');
-
-    return await res.json();
+    const response = await axios.patch(url, updateData);
+    return response.data;
   } catch (error) {
     console.error('Update error:', error);
     throw error;

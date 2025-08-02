@@ -1,19 +1,18 @@
 'use client';
 
 import React from 'react';
-import Chart from 'react-apexcharts';
+import dynamic from 'next/dynamic';
 import { ApexOptions } from 'apexcharts';
 
-// Exporting these
-export const getDonutData = () => ({
-  labels: ['Applicants Processed', 'Applicants Cleared', 'Processing', "Rejected"],
-  series: [60, 30, 41, 20],
-});
+// Dynamically import Chart component — only runs on the client
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
+type DonutChartProps = {
+  labels: string[];
+  series: number[];
+};
 
-const DonutChart = () => {
-const { labels, series } = getDonutData();
-
+const DonutChart = ({ labels, series }: DonutChartProps) => {
   const options: ApexOptions = {
     chart: {
       type: 'donut',
@@ -23,13 +22,8 @@ const { labels, series } = getDonutData();
       {
         breakpoint: 500,
         options: {
-          chart: {
-            width: 200,
-          },
-          legend: {
-            position: 'bottom',
-            horizontalAlign: 'left'
-          },
+          chart: { width: 200 },
+          legend: { position: 'bottom', horizontalAlign: 'left' },
         },
       },
     ],
